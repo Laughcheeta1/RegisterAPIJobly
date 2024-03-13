@@ -1,32 +1,36 @@
 repository = require('../DatabaseLayer/UserRepository');
 ExistingUsernameException = require('../Errors/ExistingUsernameException');
-const { validateRegister } = require('./validations');
+const loginValidation = require('./validations');
 
 const validateEmployerLogin = (loginInfo) => {
-    if (repository.getEmployerPassword(loginInfo.username) === loginInfo.password) 
-        return false;
+    basicInfo = repository.getBasicProviderInfo(loginInfo.email);
 
-    repository.logLogin(loginInfo.username);
-    response = repository.getBasicProviderInfo(loginInfo.username);
-    response.valid = true;
-    return response;
+    if (basicInfo.password !== loginInfo.password) 
+        return null; // If the username or password is incorrect, return null
+
+    repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
+    delete basicInfo.password; // The password should no be sent to the client
+
+    return basicInfo;
 }
 
 const validateProviderLogin = (loginInfo) => {
-    if (repository.getProviderPassword(loginInfo.username) !== loginInfo.password) 
-        return false;
+    basicInfo = repository.getBasicProviderInfo(loginInfo.email);
 
-    repository.logLogin(loginInfo.username);
-    response = repository.getBasicProviderInfo(loginInfo.username);
-    response.valid = true;
-    return response;
+    if (basicInfo.password !== loginInfo.password) 
+        return null; 
+
+    repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
+    delete basicInfo.password;
+    
+    return basicInfo;
 }
 
 const registerEmployer = (registerInfo) => {
     if (!loginValidation.validateRegister(registerInfo))
         throw new Error('Invalid username or password');
 
-    if (repository.employerExist(registerInfo.username)) 
+    if (repository.emailInUse(registerInfo.username)) 
         throw new ExistingUsernameException();
 
     repository.registerEmployer(registerInfo);
@@ -36,7 +40,7 @@ const registerProvider = (registerInfo) => {
     if (!loginValidation.validateRegister(registerInfo))
         throw new Error('Invalid username or password');
 
-    if (repository.providerExist(registerInfo.username)) 
+    if (repository.emailInUse(registerInfo.username)) 
         throw new ExistingUsernameException();
 
     repository.registerProvider(registerInfo);
