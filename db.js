@@ -1,16 +1,18 @@
 const { MongoClient } = require('mongodb');
 
-mongoose = require('mongodb').MongoClient;
-
 const url = 'mongodb://127.0.0.1:27017';
 
-const dbName = 'jobly';
+const dbName = 'Jobly';
 
 const client = new MongoClient(url);
 
-client.connect();
-console.log('Connected to database');
+const connectDb = async () => {
+    await client.connect();
+    console.log('Connected to database');
 
-const db = client.db(dbName);
+    const db = client.db(dbName);
+    console.log('Connected to database' + (await db.listCollections().toArray()).toString());
+    return db
+}
 
-module.exports = db;
+module.exports = connectDb;

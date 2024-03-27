@@ -1,54 +1,60 @@
-repository = require('../DatabaseLayer/UserRepository');
+repositoryInitializer = require('../DatabaseLayer/UserRepository');
 ExistingUsernameException = require('../Errors/ExistingUsernameException');
 const loginValidation = require('./validations');
 
-const validateEmployerLogin = (loginInfo) => {
-    basicInfo = repository.getBasicProviderInfo(loginInfo.email);
+const initializer = async () => {
+    const repository = await repositoryInitializer();
 
-    if (basicInfo.password !== loginInfo.password) 
-        return null; // If the username or password is incorrect, return null
+    const validateEmployerLogin = async (loginInfo) => {
+        basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
 
-    repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
-    delete basicInfo.password; // The password should no be sent to the client
+        if (basicInfo.password !== loginInfo.password) 
+            return null; // If the username or password is incorrect, return null
 
-    return basicInfo;
-}
+        repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
+        delete basicInfo.password; // The password should no be sent to the client
 
-const validateProviderLogin = (loginInfo) => {
-    basicInfo = repository.getBasicProviderInfo(loginInfo.email);
+        return basicInfo;
+    }
 
-    if (basicInfo.password !== loginInfo.password) 
-        return null; 
+    const validateProviderLogin = async (loginInfo) => {
+        basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
 
-    repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
-    delete basicInfo.password;
-    
-    return basicInfo;
-}
+        if (basicInfo.password !== loginInfo.password) 
+            return null; 
 
-const registerEmployer = (registerInfo) => {
-    if (!loginValidation.validateRegister(registerInfo))
-        throw new Error('Invalid username or password');
+        repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
+        delete basicInfo.password;
+        
+        return basicInfo;
+    }
 
-    if (repository.emailInUse(registerInfo.username)) 
-        throw new ExistingUsernameException();
+    const registerEmployer = async (registerInfo) => {
+        if (!loginValidation.validateRegister(registerInfo))
+            throw new Error('Invalid username or password');
 
-    repository.registerEmployer(registerInfo);
-}
+        if (await repository.emailInUse(registerInfo.username)) 
+            throw new ExistingUsernameException();
 
-const registerProvider = (registerInfo) => {
-    if (!loginValidation.validateRegister(registerInfo))
-        throw new Error('Invalid username or password');
+        repository.registerEmployer(registerInfo);
+    }
 
-    if (repository.emailInUse(registerInfo.username)) 
-        throw new ExistingUsernameException();
+    const registerProvider = async (registerInfo) => {
+        if (!loginValidation.validateRegister(registerInfo))
+            throw new Error('Invalid username or password');
 
-    repository.registerProvider(registerInfo);
-}
+        if (await repository.emailInUse(registerInfo.username)) 
+            throw new ExistingUsernameException();
 
-module.exports = {
-    validateEmployerLogin,
-    validateProviderLogin,
-    registerEmployer,
-    registerProvider
-}
+        repository.registerProvider(registerInfo);
+    }
+
+    return {
+        validateEmployerLogin,
+        validateProviderLogin,
+        registerEmployer,
+        registerProvider
+    }
+};
+
+module.exports = initializer;
