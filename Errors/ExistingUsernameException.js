@@ -4,3 +4,5 @@ class ExistingUsernameException extends Error {
         this.name = 'ExistingUsernameError';
     }
 }
+
+module.exports = ExistingUsernameException;

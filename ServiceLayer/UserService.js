@@ -33,9 +33,10 @@ const initializer = async () => {
         if (!loginValidation.validateRegister(registerInfo))
             throw new Error('Invalid username or password');
 
-        if (await repository.emailInUse(registerInfo.username)) 
-            throw new ExistingUsernameException();
-
+        if (await repository.emailInUse(registerInfo.email)) 
+            throw new ExistingUsernameException(); // TODO: It is working, but now I have to handle it to return an error to the client,
+                                                    // instead of crashing the server                        
+                                                    
         repository.registerEmployer(registerInfo);
     }
 
@@ -43,7 +44,7 @@ const initializer = async () => {
         if (!loginValidation.validateRegister(registerInfo))
             throw new Error('Invalid username or password');
 
-        if (await repository.emailInUse(registerInfo.username)) 
+        if (await repository.emailInUse(registerInfo.email)) 
             throw new ExistingUsernameException();
 
         repository.registerProvider(registerInfo);

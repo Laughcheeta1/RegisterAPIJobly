@@ -16,7 +16,7 @@ const initialize = async () => {
     }
 
     const emailInUse = async (email) => {
-        return await db.collection('Employer').countDocuments({ email }) > 0 || await db.collection('Provider').countDocuments({ email }) > 0;
+        return await db.collection('Employer').countDocuments({ "email" : { "$eq" : email } }) > 0 || await db.collection('Provider').countDocuments({ "email" : { "$eq" : email } }) > 0;
     }
 
     const registerEmployer = async (registerInfo) => {
