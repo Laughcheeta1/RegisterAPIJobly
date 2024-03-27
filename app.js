@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const userController = require('./ControllerLayer/UserController');
+const exceptionHandler = require('./Middlewares/ExceptionHandler');
 
 const apiGatewayURI = "";
 
@@ -17,5 +18,6 @@ app.use(cors(
 
 app.use(express.json());
 app.use('/API', userController);
+app.use(exceptionHandler);
 
 module.exports = { app };

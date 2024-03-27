@@ -1,5 +1,6 @@
 repositoryInitializer = require('../DatabaseLayer/UserRepository');
-ExistingUsernameException = require('../Errors/ExistingUsernameException');
+ExistingEmailException = require('../Errors/ExistingEmailException');
+UserNotValidException = require('../Errors/UserNotValidException');
 const loginValidation = require('./validations');
 
 const initializer = async () => {
@@ -9,7 +10,7 @@ const initializer = async () => {
         basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
 
         if (basicInfo.password !== loginInfo.password) 
-            return null; // If the username or password is incorrect, return null
+            throw new UserNotValidException(); // If the username or password is incorrect, return null
 
         repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
         delete basicInfo.password; // The password should no be sent to the client
@@ -21,7 +22,7 @@ const initializer = async () => {
         basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
 
         if (basicInfo.password !== loginInfo.password) 
-            return null; 
+            throw new UserNotValidException(); 
 
         repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
         delete basicInfo.password;
@@ -31,10 +32,10 @@ const initializer = async () => {
 
     const registerEmployer = async (registerInfo) => {
         if (!loginValidation.validateRegister(registerInfo))
-            throw new Error('Invalid username or password');
+            throw new Error('Invalid username or password'); // TODO: create a custom exception for this
 
         if (await repository.emailInUse(registerInfo.email)) 
-            throw new ExistingUsernameException(); // TODO: It is working, but now I have to handle it to return an error to the client,
+            throw new ExistingEmailException(registerInfo.email); // TODO: It is working, but now I have to handle it to return an error to the client,
                                                     // instead of crashing the server                        
                                                     
         repository.registerEmployer(registerInfo);
@@ -42,7 +43,7 @@ const initializer = async () => {
 
     const registerProvider = async (registerInfo) => {
         if (!loginValidation.validateRegister(registerInfo))
-            throw new Error('Invalid username or password');
+            throw new Error('Invalid username or password'); // TODO: create a custom exception for this
 
         if (await repository.emailInUse(registerInfo.email)) 
             throw new ExistingUsernameException();
