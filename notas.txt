@@ -1,0 +1,6 @@
+Valorar la idea de convertir este microservicio en solo uno de login
+y register. Y ya crear otro microservicio para todo el tema de los usuarios 
+como el meterle informacion y temas por el estilo.
+
+Por ende este microservicio no tendria la necesidad de validar ningun JWT, 
+solo se encargaria de cuando se haga el login, devolver el JWT en cuestion.
