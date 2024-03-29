@@ -9,8 +9,8 @@ const initializer = async () => {
     const validateEmployerLogin = async (loginInfo) => {
         basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
 
-        if (basicInfo.password !== loginInfo.password) 
-            throw new UserNotValidException(); // If the username or password is incorrect, return null
+        if (!basicInfo || basicInfo.password !== loginInfo.password) 
+            throw new UserNotValidException(); // If the email or password is incorrect, return null
 
         repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
         delete basicInfo.password; // The password should no be sent to the client
@@ -21,7 +21,7 @@ const initializer = async () => {
     const validateProviderLogin = async (loginInfo) => {
         basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
 
-        if (basicInfo.password !== loginInfo.password) 
+        if (!basicInfo || basicInfo.password !== loginInfo.password) 
             throw new UserNotValidException(); 
 
         repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
