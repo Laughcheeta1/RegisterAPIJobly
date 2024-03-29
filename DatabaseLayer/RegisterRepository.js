@@ -12,7 +12,10 @@ const initialize = async () => {
     }
 
     const getBasicProviderInfo = async (email) => {
-        return await db.collection('Provider').findOne({ email }, { projection: { _id: 1, username: 1, password: 1 } });
+        const dbResult = await db.collection('Provider').findOne({ email }, { projection: { _id: 1, username: 1, password: 1 } });
+        console.log(dbResult);
+        // TODO: it is not finding the providers. There must be a problem with the query
+        return dbResult;
     }
 
     const emailInUse = async (email) => {
