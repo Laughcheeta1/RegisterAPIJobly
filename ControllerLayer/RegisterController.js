@@ -2,7 +2,7 @@ const { generateJwt } = require('../JWT/Jwt');
 
 router = require('express').Router();
 trycatch = require('../utils/tryCatch');
-serviceInitializer = require('../ServiceLayer/UserService');
+serviceInitializer = require('../ServiceLayer/RegisterService');
 
 serviceInitializer().then((service) => {
     router.post('/employer/validate_login', trycatch(async (req, res, next) => {

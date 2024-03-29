@@ -1,4 +1,4 @@
-repositoryInitializer = require('../DatabaseLayer/UserRepository');
+repositoryInitializer = require('../DatabaseLayer/RegisterRepository');
 ExistingEmailException = require('../Errors/ExistingEmailException');
 UserNotValidException = require('../Errors/UserNotValidException');
 const loginValidation = require('./validations');

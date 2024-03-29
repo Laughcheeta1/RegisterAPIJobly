@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const userController = require('./ControllerLayer/UserController');
+const registerController = require('./ControllerLayer/RegisterController');
 const exceptionHandler = require('./Middlewares/ExceptionHandler');
 
 const apiGatewayURI = "";
@@ -17,7 +17,7 @@ app.use(cors(
 ));
 
 app.use(express.json());
-app.use('/API', userController);
+app.use('/API', registerController);
 app.use(exceptionHandler);
 
 module.exports = { app };
