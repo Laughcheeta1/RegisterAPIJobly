@@ -7,7 +7,7 @@ const initializer = async () => {
     const repository = await repositoryInitializer();
 
     const validateEmployerLogin = async (loginInfo) => {
-        basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
+        basicInfo = await repository.getBasicEmployerInfo(loginInfo.email);
 
         if (!basicInfo || basicInfo.password !== loginInfo.password) 
             throw new UserNotValidException(); // If the email or password is incorrect, return null

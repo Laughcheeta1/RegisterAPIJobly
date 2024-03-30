@@ -8,18 +8,15 @@ const initialize = async () => {
     }
 
     const getBasicEmployerInfo = async (email) => {
-        return await db.collection('Employer').findOne({ email }, { projection: { _id: 1, username: 1, password: 1 } });
+        return await db.collection('Employer').findOne({ "email" : { "$eq" : email } }, { projection: { _id: 1, username: 1, password: 1 } });
     }
 
     const getBasicProviderInfo = async (email) => {
-        const dbResult = await db.collection('Provider').findOne({ email }, { projection: { _id: 1, username: 1, password: 1 } });
-        console.log(dbResult);
-        // TODO: it is not finding the providers. There must be a problem with the query
-        return dbResult;
+        return await db.collection('Provider').findOne({ "email" : { "$eq" : email } }, { projection: { _id: 1, username: 1, password: 1 } });
     }
 
     const emailInUse = async (email) => {
-        return await db.collection('Employer').countDocuments({ "email" : { "$eq" : email } }) > 0 || await db.collection('Provider').countDocuments({ "email" : { "$eq" : email } }) > 0;
+        return await db.collection('Employer').countDocuments({  }) > 0 || await db.collection('Provider').countDocuments({ "email" : { "$eq" : email } }) > 0;
     }
 
     const registerEmployer = async (registerInfo) => {
