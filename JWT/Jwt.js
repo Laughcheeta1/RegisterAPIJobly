@@ -2,12 +2,14 @@ require('dotenv').config()
 const jwt = require("jsonwebtoken");
 
 const generateJwt = (userObject) => {
-    // TODO: add expiration logic to the JWT
-    // TODO: make the private key come from the environment variables of the pc, not the server
-    const accesToken = jwt.sign(userObject, process.env.ACCES_TOKEN_SECRET);
-    return accesToken;
+    return jwt.sign(userObject, process.env.ACCES_TOKEN_SECRET, { expiresIn: '10min' });
+}
+
+const generateRefreshToken = (userObject) => {
+    return jwt.sign(userObject, process.env.REFRESH_TOKEN_SECRET);
 }
 
 module.exports = {
-    generateJwt
+    generateJwt,
+    generateRefreshToken
 };
