@@ -8,7 +8,7 @@ serviceInitializer().then((service) => {
 
     router.post('/newToken', async (req, res, next) => {
         const refreshToken = req.body.token;
-        
+        // TODO: finish new token method
     });
 
     router.post('/employer/validate_login', async (req, res, next) => {
