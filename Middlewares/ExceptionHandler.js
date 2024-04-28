@@ -1,5 +1,6 @@
 const exceptionHandler = (error, req, res, next) => {
     // The "||" is for, if the error does not have that property, it will return the default value (the one on the right)
+    //console.log(error); // Only when debugging
     res.status(error.statusCode || 500).json(
         {
             error : error.name || "Internal Server Error",
