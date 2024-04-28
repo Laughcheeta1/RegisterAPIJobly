@@ -13,7 +13,7 @@ serviceInitializer().then((service) => {
 
     router.post('/newToken', trycatch(async (req, res, next) => {
         const refreshToken = req.body.token;
-        // TODO: finish new token method
+        res.status(200).json(await service.generateNewToken(refreshToken)).send();
     }));
 
     router.post('/employer/validate_login', trycatch(async (req, res, next) => {
@@ -26,12 +26,12 @@ serviceInitializer().then((service) => {
 
     router.post('/employer/register', trycatch(async (req, res, next) => {
         await service.registerEmployer(req.body);
-        res.status(200).send();
+        res.status(201).send();
     }));
 
     router.post('/provider/register', trycatch(async (req, res, next) => {
         await service.registerProvider(req.body);
-        res.status(200).send();
+        res.status(201).send();
     }));
 });
 

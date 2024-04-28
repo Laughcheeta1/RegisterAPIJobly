@@ -38,7 +38,7 @@ const getLoginLogic = (repository) =>
         if (!basicInfo || basicInfo.password !== loginInfo.password) 
             throw new UserNotValidException(); 
 
-        repository.logLogin(basicInfo.dbId); // First the logLogin, since it is a async function
+        repository.logProviderLogin(basicInfo.dbId); // First the logLogin, since it is a async function
         delete basicInfo.password;
         
         refreshToken = generateRefreshToken({ 
@@ -54,7 +54,8 @@ const getLoginLogic = (repository) =>
                                 "role" : roles.provider,
                                 "email": basicInfo.email
                             }),
-            "RefreshToken" : refreshToken
+            "RefreshToken" : refreshToken,
+            "name" : basicInfo.name
         };
     };
 
