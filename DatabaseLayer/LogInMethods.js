@@ -13,7 +13,7 @@ const getLoginMethods = (db) =>
     const getBasicEmployerInfoByEmail = async (email) => {
         basicInfo = await db.collection('Employer').findOne({ "email" : { "$eq" : email } }, { projection: { _id: 1, name: 1, password: 1 } });
         if (!basicInfo) return null; // If the email is not found, return null
-        basicInfo.dbId = basicInfo._id;
+        basicInfo.dbId = basicInfo._id.toString(); // Not get the objectId object, but the string
         delete basicInfo._id; // When create the dbId, we can delete all this.
         return basicInfo; // It is just temporal
     };
@@ -21,7 +21,7 @@ const getLoginMethods = (db) =>
     const getBasicProviderInfoByEmail = async (email) => {
         basicInfo = await db.collection('Provider').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1 } })
         if (!basicInfo) return null; // If the email is not found, return null
-        basicInfo.dbId = basicInfo._id;
+        basicInfo.dbId = basicInfo._id.toString();
         delete basicInfo._id;
         return basicInfo;
     };
@@ -35,7 +35,7 @@ const getLoginMethods = (db) =>
         console.log(basicInfo);
 
         if (!basicInfo) return null; // If the dbId is not found, return null
-        basicInfo.dbId = basicInfo._id;
+        basicInfo.dbId = basicInfo._id.toString();
         delete basicInfo._id; // When create the dbId, we can delete all this.
         return basicInfo; // It is just temporal
     };
@@ -43,7 +43,7 @@ const getLoginMethods = (db) =>
     const getBasicProviderInfoByDbId = async (dbId) => {
         basicInfo = await db.collection('Provider').findOne({ "_id" : { "$eq" : new ObjectId(dbId) } }, { projection: { dbId: 1, name: 1, password: 1 } })
         if (!basicInfo) return null; // If the dbId is not found, return null
-        basicInfo.dbId = basicInfo._id;
+        basicInfo.dbId = basicInfo._id.toString();
         delete basicInfo._id;
         return basicInfo;
     };
