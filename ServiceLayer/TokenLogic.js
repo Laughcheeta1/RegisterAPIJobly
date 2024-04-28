@@ -13,10 +13,6 @@ const getTokenLogic = (repository) =>
     * Output: { "AccessToken" : accessToken, "RefreshToken" : refreshToken }
     * This method is used to generate a new access token and refresh token
     */
-
-    // TODO: when sengind the same refresh token multiple times, it is still accepted
-    // When seen in the database, the same object has multiple refresh tokens
-    // This could be easily fixed by adding the DbId the teacher told me about
     const generateNewToken = async (refreshToken) => {    
         if (!refreshToken) 
             throw new NoRefreshTokenProvidedException();
