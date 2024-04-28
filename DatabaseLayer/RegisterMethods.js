@@ -9,10 +9,26 @@ const getRegisterMethods = (db) =>
     }
 
     const registerEmployer = async (registerInfo) => {
+        // TODO: Convert this into a single transaction, to avoid autoincrement without insertion
+        dbId = (await db.collection('AutoIncrementCounter').findOneAndUpdate(
+                    { 'collection': 'Employer' }, 
+                    { $inc: { counter: 1 } }, 
+                    { returnDocument: 'after' }))  // Return the updated document
+                    .counter;  // From the json return value, just get the counter
+
+        registerInfo.dbId = dbId;
         await db.collection('Employer').insertOne(registerInfo);
     }
 
     const registerProvider = async (registerInfo) => {
+        // TODO: convert this into a single transaction
+        dbId = (await db.collection('AutoIncrementCounter').findOneAndUpdate(
+                    { 'collection': 'Provider' }, 
+                    { $inc: { counter: 1 } }, 
+                    { returnDocument: 'after' }))  // Return the updated document
+                    .counter;  // From the json return value, just get the counter
+
+        registerInfo.dbId = dbId;
         await db.collection('Provider').insertOne(registerInfo);
     }
 
