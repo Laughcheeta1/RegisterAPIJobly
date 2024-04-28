@@ -6,7 +6,7 @@ const roles = require('../Extra/roles.json');
 const getLoginLogic = (repository) =>
 {
     const validateEmployerLogin = async (loginInfo) => {
-        basicInfo = await repository.getBasicEmployerInfo(loginInfo.email);
+        basicInfo = await repository.getBasicEmployerInfoByEmail(loginInfo.email);
 
         if (!basicInfo || basicInfo.password !== loginInfo.password) 
             throw new UserNotValidException(); // If the email or password is incorrect, return null
@@ -34,7 +34,7 @@ const getLoginLogic = (repository) =>
     };
 
     const validateProviderLogin = async (loginInfo) => {
-        basicInfo = await repository.getBasicProviderInfo(loginInfo.email);
+        basicInfo = await repository.getBasicProviderInfoByEmail(loginInfo.email);
 
         if (!basicInfo || basicInfo.password !== loginInfo.password) 
             throw new UserNotValidException(); 
