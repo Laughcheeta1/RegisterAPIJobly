@@ -17,8 +17,8 @@ const getLoginLogic = (repository) =>
 
         // We are awaiting all this things in case something goes wrong with the DB, then the login will not be completed
         /*It's better to save the refresh token with the dbId, so that we can delete it without having the previous refreshToken*/
-        await repository.deleteRefreshToken(loginInfo.dbId); // Before saving a new refresh token, delete the old one
-        await repository.saveRefreshToken(refreshToken, loginInfo.dbId); // Save the new refresh token
+        await repository.deleteRefreshToken(basicInfo.dbId); // Before saving a new refresh token, delete the old one
+        await repository.saveRefreshToken(refreshToken, basicInfo.dbId); // Save the new refresh token
 
         await repository.logEmployerLogin(basicInfo.dbId);
         return {
@@ -45,7 +45,7 @@ const getLoginLogic = (repository) =>
                             "dbId" : basicInfo.dbId,
                         });
         repository.deleteRefreshToken(basicInfo.dbId); // Before saving a new refresh token, delete the old one
-        repository.saveRefreshToken(refreshToken, loginInfo.dbId);
+        repository.saveRefreshToken(refreshToken, basicInfo.dbId);
         
         await repository.logProviderLogin(basicInfo.dbId); // First the logLogin, since it is a async function
         return {
