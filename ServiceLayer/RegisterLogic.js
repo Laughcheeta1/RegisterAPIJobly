@@ -19,7 +19,7 @@ const getRegisterLogic = (repository) =>
             throw new Error('Invalid username or password'); // TODO: define if we are doing this
 
         if (await repository.emailInUse(registerInfo.email)) 
-            throw new ExistingUsernameException();
+            throw new ExistingEmailException(registerInfo.email);
 
         repository.registerProvider(registerInfo);
     };
