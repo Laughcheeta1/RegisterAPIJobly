@@ -12,7 +12,8 @@ const getLoginLogic = (repository) =>
             throw new UserNotValidException(); // If the email or password is incorrect, return null
 
         refreshToken = generateRefreshToken({ 
-                            "dbId" : basicInfo.dbId
+                            "dbId" : basicInfo.dbId,
+                            "role" : roles.employer
                         });
 
         // We are awaiting all this things in case something goes wrong with the DB, then the login will not be completed
@@ -43,6 +44,7 @@ const getLoginLogic = (repository) =>
         
         refreshToken = generateRefreshToken({ 
                             "dbId" : basicInfo.dbId,
+                            "role" : roles.provider
                         });
         repository.deleteRefreshToken(basicInfo.dbId); // Before saving a new refresh token, delete the old one
         repository.saveRefreshToken(refreshToken, basicInfo.dbId);
