@@ -16,6 +16,9 @@ serviceInitializer().then((service) => {
         res.status(200).json(await service.generateNewToken(refreshToken)).send();
     }));
 
+    // TODO: Add Admin login but not register (register manually in db)
+
+    // TODO: send the token in cookies
     router.post('/employer/validate_login', trycatch(async (req, res, next) => {
         res.status(200).json(await service.validateEmployerLogin(req.body)).send();
     }));
@@ -24,6 +27,8 @@ serviceInitializer().then((service) => {
         res.status(200).json(await service.validateProviderLogin(req.body)).send();
     }));
 
+
+    // TODO: Add password encription
     router.post('/employer/register', trycatch(async (req, res, next) => {
         await service.registerEmployer(req.body);
         res.status(201).send();

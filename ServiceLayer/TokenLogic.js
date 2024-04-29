@@ -30,8 +30,7 @@ const getTokenLogic = (repository) =>
             basicInfo = await repository.getBasicProviderInfoByDbId(tokenContent.dbId);  // Get the basic info
         else
             throw new UnvalidRoleException();
-        
-        console.log(basicInfo);
+    
         delete basicInfo.password;  // Delete the password from the basic info
 
         // Delete the old refresh token

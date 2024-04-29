@@ -1,5 +1,3 @@
-const { ObjectId } = require('mongodb');
-
 const getLoginMethods = (db) => 
 {
     const logEmployerLogin = async (dbId) => {
