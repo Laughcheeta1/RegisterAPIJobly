@@ -2,7 +2,7 @@ const NoRefreshTokenProvidedException = require('../Errors/NoRefreshTokenProvide
 const NotValidRefreshTokenException = require('../Errors/NotValidRefreshTokenException');
 const UnvalidRoleException = require('../Errors/UnvalidRoleException');
 
-const { unEncriptRefreshToken, generateRefreshToken, generateJwt } = require('../JWT/Jwt');
+const { unEncriptRefreshToken, generateRefreshToken, generateAccessToken } = require('../JWT/Jwt');
 
 const roles = require('../Extra/roles.json');
 
@@ -13,7 +13,7 @@ const getTokenLogic = (repository) =>
     * Output: { "AccessToken" : accessToken, "RefreshToken" : refreshToken }
     * This method is used to generate a new access token and refresh token
     */
-    const generateNewToken = async (refreshToken) => {    
+    const generateNewToken = async (refreshToken, res) => {    
         if (!refreshToken) 
             throw new NoRefreshTokenProvidedException();
 
@@ -33,22 +33,23 @@ const getTokenLogic = (repository) =>
         else
             throw new UnvalidRoleException();
     
-        delete basicInfo.password;  // Delete the password from the basic info
+        // delete basicInfo.password;  // Delete the password from the basic info
 
-        // Delete the old refresh token
-        await repository.deleteRefreshToken(tokenContent.dbId);
-        // Generate a new refresh token
-        refreshToken = generateRefreshToken({ 
-                            "dbId" : tokenContent.dbId,
-                            "role" : tokenContent.role,
-                        });
-        await repository.saveRefreshToken(refreshToken, tokenContent.dbId);  // Save the new refresh token
+        // // Delete the old refresh token
+        // await repository.deleteRefreshToken(tokenContent.dbId);
+        // // Generate a new refresh token
+        // refreshToken = generateRefreshToken({ 
+        //                     "dbId" : tokenContent.dbId,
+        //                     "role" : tokenContent.role,
+        //                 });
+        // await repository.saveRefreshToken(refreshToken, tokenContent.dbId);  // Save the new refresh token
 
         // Return both the new access token and the new refresh token
-        return {
-            "AccessToken" : generateJwt(basicInfo),
-            "RefreshToken" : refreshToken
-        };
+        res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : tokenContent.role, "email": basicInfo.email }), {
+            httpOnly: true, 
+            //secure: true,
+            sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
+        });
     };
 
     return {

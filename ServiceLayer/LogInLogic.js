@@ -1,4 +1,4 @@
-const { generateAccesToken, generateRefreshToken } = require('../JWT/Jwt');
+const { generateAccessToken, generateRefreshToken } = require('../JWT/Jwt');
 
 const bcrypt = require('bcrypt');
 
@@ -30,7 +30,7 @@ const getLoginLogic = (repository) =>
             maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
         });
 
-        res.cookie("A_Token", generateAccesToken({ "dbId" : basicInfo.dbId, "role" : roles.admin, "email": basicInfo.email }), {
+        res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : roles.admin, "email": basicInfo.email }), {
             httpOnly: true, 
             //secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
@@ -69,7 +69,7 @@ const getLoginLogic = (repository) =>
         });
 
         // Get the access token
-        res.cookie("A_Token", generateAccesToken({ "dbId" : basicInfo.dbId, "role" : roles.employer, "email": basicInfo.email }), {
+        res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : roles.employer, "email": basicInfo.email }), {
             httpOnly: true, 
             //secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
@@ -108,7 +108,7 @@ const getLoginLogic = (repository) =>
         });
 
         // Get the access token
-        res.cookie("A_Token", generateAccesToken({ "dbId" : basicInfo.dbId, "role" : roles.provider, "email": basicInfo.email }), {
+        res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : roles.provider, "email": basicInfo.email }), {
             httpOnly: true, 
             //secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)

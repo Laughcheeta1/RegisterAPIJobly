@@ -1,5 +1,3 @@
-const { generateJwt, generateRefreshToken } = require('../JWT/Jwt');
-
 router = require('express').Router();
 
 // Turns out that the tryCatch function is needed since express does not automatically handle exceptions (Throwing it to the 
@@ -11,7 +9,7 @@ serviceInitializer = require('../ServiceLayer/RegisterService');
 
 serviceInitializer().then((service) => {
 
-    router.post('/newToken', trycatch(async (req, res, next) => {
+    router.post('/new_token', trycatch(async (req, res, next) => {
         // Get the refresh token from the cookies
         // TODO: Check if the cookie does have the name R_Token or not
         res.status(200).json(await service.generateNewToken(req.cookies.R_Token)).send();
