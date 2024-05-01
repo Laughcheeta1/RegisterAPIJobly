@@ -32,8 +32,6 @@ serviceInitializer().then((service) => {
         res.status(200).send();  // The validateEmployerLogin function will set the response body and cookies
     }));
 
-
-    // TODO: Add password encription
     router.post('/employer/register', trycatch(async (req, res, next) => {
         await service.registerEmployer(req.body);
         res.status(201).send();
