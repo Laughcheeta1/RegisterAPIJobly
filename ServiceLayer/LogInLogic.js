@@ -27,7 +27,7 @@ const getLoginLogic = (repository) =>
         res.cookie("R_Token", refreshToken, { 
             httpOnly: true,
             //secure: true, 
-            sameSite: "None",  // TODO: Change this to only certain origins (Probably using CORS, idk)
+            sameSite: "Strict", // The refresh token only needs to be accesed by the RegisterAPI
             maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
         });
 
@@ -66,7 +66,7 @@ const getLoginLogic = (repository) =>
         res.cookie("R_Token", refreshToken, { 
             httpOnly: true,
             //secure: true,  //TODO: create secure connection to enable this
-            sameSite: "None",  // TODO: Change this to only certain origins (Probably using CORS, idk)
+            sameSite: "Strict", // The refresh token only needs to be accesed by the RegisterAPI
             maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
         });
 
