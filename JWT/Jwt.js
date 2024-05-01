@@ -1,7 +1,7 @@
 require('dotenv').config()
 const jwt = require("jsonwebtoken");
 
-const generateJwt = (userObject) => {
+const generateAccesToken = (userObject) => {
     return jwt.sign(userObject, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5min' });
 }
 
@@ -14,7 +14,7 @@ const unEncriptRefreshToken = (token) => {
 }
 
 module.exports = {
-    generateJwt,
+    generateAccesToken,
     generateRefreshToken,
     unEncriptRefreshToken
 };
