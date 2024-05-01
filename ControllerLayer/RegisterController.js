@@ -12,19 +12,21 @@ serviceInitializer = require('../ServiceLayer/RegisterService');
 serviceInitializer().then((service) => {
 
     router.post('/newToken', trycatch(async (req, res, next) => {
-        const refreshToken = req.body.token;
-        res.status(200).json(await service.generateNewToken(refreshToken)).send();
+        // Get the refresh token from the cookies
+        // TODO: Check if the cookie does have the name R_Token or not
+        res.status(200).json(await service.generateNewToken(req.cookies.R_Token)).send();
     }));
 
     // TODO: Add Admin login but not register (register manually in db)
 
-    // TODO: send the token in cookies
     router.post('/employer/validate_login', trycatch(async (req, res, next) => {
-        res.status(200).json(await service.validateEmployerLogin(req.body)).send();
+        await service.validateEmployerLogin(req.body, res);
+        res.status(200).send();  // The validateEmployerLogin function will set the response body and cookies
     }));
 
     router.post('/provider/validate_login', trycatch(async (req, res, next) => {
-        res.status(200).json(await service.validateProviderLogin(req.body)).send();
+        await service.validateProviderLogin(req.body, res);
+        res.status(200).send();  // The validateEmployerLogin function will set the response body and cookies
     }));
 
 

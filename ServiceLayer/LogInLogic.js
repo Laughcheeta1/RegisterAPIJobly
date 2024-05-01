@@ -1,11 +1,11 @@
-const { generateJwt, generateRefreshToken } = require('../JWT/Jwt');
+const { generateAccesToken, generateRefreshToken } = require('../JWT/Jwt');
 
 const UserNotValidException = require('../Errors/UserNotValidException');
 const roles = require('../Extra/roles.json');
 
 const getLoginLogic = (repository) =>
 {
-    const validateEmployerLogin = async (loginInfo) => {
+    const validateEmployerLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicEmployerInfoByEmail(loginInfo.email);
 
         if (!basicInfo || basicInfo.password !== loginInfo.password) 
@@ -22,18 +22,30 @@ const getLoginLogic = (repository) =>
         await repository.saveRefreshToken(refreshToken, basicInfo.dbId); // Save the new refresh token
 
         await repository.logEmployerLogin(basicInfo.dbId);
-        return {
-            "AccessToken" : generateJwt({ 
-                                    "dbId" : basicInfo.dbId,
-                                    "role" : roles.employer,
-                                    "email": basicInfo.email
-                                }),
-            "RefreshToken" : refreshToken,
-            "name" : basicInfo.name
-        };
+
+        // Get the refresh token
+        res.cookie("R_Token", refreshToken, { 
+            httpOnly: true,
+            //secure: true, 
+            sameSite: "None",  // TODO: Change this to only certain origins (Probably using CORS, idk)
+            maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
+        });
+
+        // Get the access token
+        res.cookie("A_Token", generateAccesToken({ "dbId" : basicInfo.dbId, "role" : roles.employer, "email": basicInfo.email }), {
+            httpOnly: true, 
+            //secure: true,
+            sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
+        });
+        
+        // Give the response's body
+        res.json({
+            "name" : basicInfo.name,
+            "role" : roles.employer
+        });
     };
 
-    const validateProviderLogin = async (loginInfo) => {
+    const validateProviderLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicProviderInfoByEmail(loginInfo.email);
 
         if (!basicInfo || basicInfo.password !== loginInfo.password) 
@@ -50,15 +62,25 @@ const getLoginLogic = (repository) =>
         repository.saveRefreshToken(refreshToken, basicInfo.dbId);
         
         await repository.logProviderLogin(basicInfo.dbId); // First the logLogin, since it is a async function
-        return {
-            "AccessToken" : generateJwt({ 
-                                "dbId" : basicInfo.dbId,
-                                "role" : roles.provider,
-                                "email": basicInfo.email
-                            }),
-            "RefreshToken" : refreshToken,
-            "name" : basicInfo.name
-        };
+
+        res.cookie("R_Token", refreshToken, { 
+            httpOnly: true,
+            //secure: true,  //TODO: create secure connection to enable this
+            sameSite: "None",  // TODO: Change this to only certain origins (Probably using CORS, idk)
+            maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
+        });
+
+        // Get the access token
+        res.cookie("A_Token", generateAccesToken({ "dbId" : basicInfo.dbId, "role" : roles.provider, "email": basicInfo.email }), {
+            httpOnly: true, 
+            //secure: true,
+            sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
+        });
+
+        res.json({
+            "name" : basicInfo.name,
+            "role" : roles.provider
+        });
     };
 
     return {

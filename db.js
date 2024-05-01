@@ -8,10 +8,9 @@ const client = new MongoClient(url);
 
 const connectDb = async () => {
     await client.connect();
-    console.log('Connected to database');
 
     const db = client.db(dbName);
-    console.log('Connected to database' + (await db.listCollections().toArray()).toString());
+    console.log('Connected to database');
     return db
 }
 
