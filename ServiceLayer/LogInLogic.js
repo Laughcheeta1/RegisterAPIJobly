@@ -7,6 +7,41 @@ const roles = require('../Extra/roles.json');
 
 const getLoginLogic = (repository) =>
 {
+    const validateAdminLogin = async (loginInfo, res) => {
+        basicInfo = await repository.getAdminInfoByEmail(loginInfo.email);
+        
+        if (!basicInfo || !bcrypt.compare(loginInfo.password, basicInfo.password))
+            throw new UserNotValidException(); // If the email or password is incorrect, return null
+
+        refreshToken = generateRefreshToken({ 
+                            "dbId" : basicInfo.dbId,
+                            "role" : roles.admin
+                        });
+        
+        await repository.deleteRefreshToken(basicInfo.dbId); // Before saving a new refresh token, delete the old one
+        await repository.saveRefreshToken(refreshToken, basicInfo.dbId); // Save the new refresh token
+
+        await repository.logAdminLogin(basicInfo.dbId);
+
+        res.cookie("R_Token", refreshToken, {
+            httpOnly: true,
+            //secure: true, 
+            sameSite: "Strict", // The refresh token only needs to be accesed by the RegisterAPI
+            maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
+        });
+
+        res.cookie("A_Token", generateAccesToken({ "dbId" : basicInfo.dbId, "role" : roles.admin, "email": basicInfo.email }), {
+            httpOnly: true, 
+            //secure: true,
+            sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
+        });
+
+        res.json({
+            "name" : basicInfo.name,
+            "role" : roles.admin
+        });
+    };
+
     const validateEmployerLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicEmployerInfoByEmail(loginInfo.email);
 
@@ -86,6 +121,7 @@ const getLoginLogic = (repository) =>
     };
 
     return {
+        validateAdminLogin,
         validateEmployerLogin,
         validateProviderLogin
     };

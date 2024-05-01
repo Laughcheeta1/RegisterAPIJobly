@@ -17,7 +17,10 @@ serviceInitializer().then((service) => {
         res.status(200).json(await service.generateNewToken(req.cookies.R_Token)).send();
     }));
 
-    // TODO: Add Admin login but not register (register manually in db)
+    router.post('/admin/validate_login', trycatch(async (req, res, next) => {
+        await service.validateAdminLogin(req.body, res);
+        res.status(200).send();  // The validateAdminLogin function will set the response body and cookies
+    }));
 
     router.post('/employer/validate_login', trycatch(async (req, res, next) => {
         await service.validateEmployerLogin(req.body, res);

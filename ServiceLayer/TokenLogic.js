@@ -28,6 +28,8 @@ const getTokenLogic = (repository) =>
             basicInfo = await repository.getBasicEmployerInfoByDbId(tokenContent.dbId);  // Get the basic info
         else if (tokenContent.role === roles.provider)
             basicInfo = await repository.getBasicProviderInfoByDbId(tokenContent.dbId);  // Get the basic info
+        else if (tokenContent.role === roles.admin)
+            basicInfo = await repository.getAdminInfoByDbId(tokenContent.dbId);  // Get the basic info
         else
             throw new UnvalidRoleException();
     
