@@ -1,5 +1,7 @@
 const { generateAccesToken, generateRefreshToken } = require('../JWT/Jwt');
 
+const bcrypt = require('bcrypt');
+
 const UserNotValidException = require('../Errors/UserNotValidException');
 const roles = require('../Extra/roles.json');
 
@@ -8,7 +10,7 @@ const getLoginLogic = (repository) =>
     const validateEmployerLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicEmployerInfoByEmail(loginInfo.email);
 
-        if (!basicInfo || basicInfo.password !== loginInfo.password) 
+        if (!basicInfo || !bcrypt.compare(loginInfo.password, basicInfo.password))
             throw new UserNotValidException(); // If the email or password is incorrect, return null
 
         refreshToken = generateRefreshToken({ 
@@ -48,7 +50,7 @@ const getLoginLogic = (repository) =>
     const validateProviderLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicProviderInfoByEmail(loginInfo.email);
 
-        if (!basicInfo || basicInfo.password !== loginInfo.password) 
+        if (!basicInfo || !bcrypt.compare(loginInfo.password, basicInfo.password))
             throw new UserNotValidException(); 
 
         repository.logProviderLogin(basicInfo.dbId); // First the logLogin, since it is a async function
