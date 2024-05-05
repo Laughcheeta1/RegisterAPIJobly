@@ -15,7 +15,7 @@ app.use(morgan('dev'));
 // ));
 
 app.use(express.json());
-app.use('/API', registerController);
+app.use('/API/Register', registerController);
 app.use(exceptionHandler);
 
 module.exports = { app };
