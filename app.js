@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-// const cors = require('cors');
+const cors = require('cors');
 const registerController = require('./ControllerLayer/RegisterController');
 const exceptionHandler = require('./Middlewares/ExceptionHandler');
 
