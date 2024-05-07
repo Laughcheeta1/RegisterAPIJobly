@@ -1,7 +1,7 @@
 # Explanation of the End points:
 
 ## 1. Login
-`POST` `API/***/validate_login`
+`POST` `API/Register/***/validate_login`
 This endpoint recieves:
 - `email`
 - `password`
@@ -18,7 +18,7 @@ Returns:
 <br>
 
 ## 2. Register
-`POST` `API/***/register`
+`POST` `API/Register/***/register`
 This endpoint recieves:
 - The register form data
 
@@ -28,7 +28,7 @@ and just add the user to the database.
 <br>
 
 ## 3. New Token
-`POST` `API/***/new_token`
+`POST` `API/Register/***/new_token`
 This endpoint recieves:
 - Cookie R_Token
 
