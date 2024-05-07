@@ -8,13 +8,15 @@ trycatch = require('../utils/tryCatch');
 serviceInitializer = require('../ServiceLayer/RegisterService');
 
 serviceInitializer().then((service) => {
-
+    // REFRESH TOKEN
     router.post('/new_token', trycatch(async (req, res, next) => {
         // Get the refresh token from the cookies
         // TODO: Check if the cookie does have the name R_Token or not
         res.status(200).json(await service.generateNewToken(req.cookies.R_Token)).send();
     }));
 
+    
+    // LOGIN
     router.post('/admin/validate_login', trycatch(async (req, res, next) => {
         await service.validateAdminLogin(req.body, res);
         res.status(200).send();  // The validateAdminLogin function will set the response body and cookies
@@ -30,6 +32,8 @@ serviceInitializer().then((service) => {
         res.status(200).send();  // The validateEmployerLogin function will set the response body and cookies
     }));
 
+
+    // REGISTER
     router.post('/employer/register', trycatch(async (req, res, next) => {
         await service.registerEmployer(req.body);
         res.status(201).send();
