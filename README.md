@@ -3,8 +3,12 @@
 ## 1. Login
 `POST` `API/Register/***/validate_login`
 This endpoint recieves:
-- `email`
-- `password`
+<pre>
+{
+    email,
+    password
+}
+</pre>
 
 Returns:
 - Cookie R_Token, this is the refresh token
