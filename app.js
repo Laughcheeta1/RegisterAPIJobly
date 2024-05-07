@@ -7,11 +7,10 @@ const exceptionHandler = require('./Middlewares/ExceptionHandler');
 const app = express();
 
 app.use(morgan('dev'));
-app.use(cors(
-    {
-        origin: '*'
-    }
-));
+app.use(cors({
+    origin: 'http://localhost:5173',  // Replace with your client's origin
+    credentials: true
+}));
 
 app.use(express.json());
 app.use('/API/Register', registerController);

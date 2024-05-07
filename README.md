@@ -21,6 +21,15 @@ Returns:
 `POST` `API/Register/***/register`
 This endpoint recieves:
 - The register form data
+<pre>
+{
+    name,
+    email,
+    password,
+    phoneNumber
+}
+</pre>
+
 
 Checks that the email and phone number are not already in use,
 and just add the user to the database.
