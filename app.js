@@ -7,12 +7,11 @@ const exceptionHandler = require('./Middlewares/ExceptionHandler');
 const app = express();
 
 app.use(morgan('dev'));
-// app.use(cors(
-//     {
-//         origin: apiGatewayURI,
-//         credentials: true
-//     }
-// ));
+app.use(cors(
+    {
+        origin: '*'
+    }
+));
 
 app.use(express.json());
 app.use('/API/Register', registerController);
