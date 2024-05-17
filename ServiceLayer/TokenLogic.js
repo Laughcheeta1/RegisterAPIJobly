@@ -35,6 +35,8 @@ const getTokenLogic = (repository) =>
     
         // delete basicInfo.password;  // Delete the password from the basic info
 
+        // TODO: define if the refresh token should be deleted and a new one generated
+
         // // Delete the old refresh token
         // await repository.deleteRefreshToken(tokenContent.dbId);
         // // Generate a new refresh token
@@ -50,6 +52,11 @@ const getTokenLogic = (repository) =>
             //secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
         });
+
+        return {
+            "name" : basicInfo.name,
+            "role" : basicInfo.role
+        }
     };
 
     return {

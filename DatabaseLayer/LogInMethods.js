@@ -13,27 +13,27 @@ const getLoginMethods = (db) =>
     };
 
     const getAdminInfoByEmail = async (email) => {
-        return await db.collection('Admin').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1 } });
+        return await db.collection('Admin').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1, email: 1 } });
     };
 
     const getAdminInfoByDbId = async (dbId) => {
-        return await db.collection('Admin').findOne({ "dbId" : { "$eq" : dbId } }, { projection: { dbId: 1, name: 1, password: 1 } });
+        return await db.collection('Admin').findOne({ "dbId" : { "$eq" : dbId } }, { projection: { dbId: 1, name: 1, password: 1, email: 1 } });
     };
 
     const getBasicEmployerInfoByEmail = async (email) => {
-        return await db.collection('Employer').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1 } });
+        return await db.collection('Employer').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1, email: 1 } });
     };
 
     const getBasicProviderInfoByEmail = async (email) => {
-        return await db.collection('Provider').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1 } })
+        return await db.collection('Provider').findOne({ "email" : { "$eq" : email } }, { projection: { dbId: 1, name: 1, password: 1, email: 1 } })
     };
 
     const getBasicEmployerInfoByDbId = async (dbId) => {
-        return await db.collection('Employer').findOne({ "dbId" : { "$eq" : dbId } }, { projection: { dbId: 1, name: 1, password: 1 } });
+        return await db.collection('Employer').findOne({ "dbId" : { "$eq" : dbId } }, { projection: { dbId: 1, name: 1, password: 1, email: 1 } });
     };
 
     const getBasicProviderInfoByDbId = async (dbId) => {
-        return await db.collection('Provider').findOne({ "dbId" : { "$eq" : dbId } }, { projection: { dbId: 1, name: 1, password: 1 } })
+        return await db.collection('Provider').findOne({ "dbId" : { "$eq" : dbId } }, { projection: { dbId: 1, name: 1, password: 1, email: 1 } })
     };
 
     return {

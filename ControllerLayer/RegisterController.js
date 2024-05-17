@@ -11,7 +11,6 @@ serviceInitializer().then((service) => {
     // REFRESH TOKEN
     router.post('/new_token', trycatch(async (req, res, next) => {
         // Get the refresh token from the cookies
-        // TODO: Check if the cookie does have the name R_Token or not
         res.status(200).json(await service.generateNewToken(req.cookies.R_Token, res)).send();
     }));
 
