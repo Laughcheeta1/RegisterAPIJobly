@@ -12,10 +12,9 @@ serviceInitializer().then((service) => {
     router.post('/new_token', trycatch(async (req, res, next) => {
         // Get the refresh token from the cookies
         // TODO: Check if the cookie does have the name R_Token or not
-        res.status(200).json(await service.generateNewToken(req.cookies.R_Token)).send();
+        res.status(200).json(await service.generateNewToken(req.cookies.R_Token, res)).send();
     }));
 
-    
     // LOGIN
     router.post('/admin/validate_login', trycatch(async (req, res, next) => {
         await service.validateAdminLogin(req.body, res);

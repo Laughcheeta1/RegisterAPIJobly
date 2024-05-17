@@ -84,6 +84,8 @@ const getLoginLogic = (repository) =>
 
     const validateProviderLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicProviderInfoByEmail(loginInfo.email);
+        console.log(loginInfo)
+        console.log(basicInfo)
 
         if (!basicInfo || !bcrypt.compare(loginInfo.password, basicInfo.password))
             throw new UserNotValidException(); 
