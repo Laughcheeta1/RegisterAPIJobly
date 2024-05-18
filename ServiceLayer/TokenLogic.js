@@ -48,14 +48,14 @@ const getTokenLogic = (repository) =>
 
         // Return both the new access token and the new refresh token
         res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : tokenContent.role, "email": basicInfo.email }), {
-            httpOnly: true, 
-            //secure: true,
+            httpOnly: false, 
+            secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
         });
 
         return {
-            "name" : basicInfo.name,
-            "role" : basicInfo.role
+            name : basicInfo.name,
+            role : tokenContent.role
         }
     };
 

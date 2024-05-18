@@ -11,7 +11,8 @@ serviceInitializer().then((service) => {
     // REFRESH TOKEN
     router.post('/new_token', trycatch(async (req, res, next) => {
         // Get the refresh token from the cookies
-        res.status(200).json(await service.generateNewToken(req.cookies.R_Token, res)).send();
+        const data = await service.generateNewToken(req.cookies.R_Token, res)
+        res.status(200).json(data).send();
     }));
 
     // LOGIN

@@ -1,5 +1,5 @@
 const ExistingEmailException = require('../Errors/ExistingEmailException');
-const ExistingPhoneNumberException = require('../Errors/ExistingPhoneNumberException');
+const getLoginLogic = require("./LogInLogic")
 
 const bcrypt = require('bcrypt');
 
@@ -13,9 +13,6 @@ const getRegisterLogic = (repository) =>
 
         if (await repository.emailInUse(registerInfo.email)) 
             throw new ExistingEmailException(registerInfo.email);
-        
-        // if (await repository.phoneNumerInUse(registerInfo.phoneNumber))
-        //     throw new ExistingPhoneNumberException(registerInfo.phoneNumber);
 
         registerInfo.password = await bcrypt.hash(registerInfo.password, 10);  // Encrypt the password
         repository.registerEmployer(registerInfo);
@@ -27,9 +24,6 @@ const getRegisterLogic = (repository) =>
 
         if (await repository.emailInUse(registerInfo.email)) 
             throw new ExistingEmailException(registerInfo.email);
-
-        // if (await repository.phoneNumerInUse(registerInfo.phoneNumber))
-        //     throw new ExistingPhoneNumberException(registerInfo.phoneNumber);
 
         registerInfo.password = await bcrypt.hash(registerInfo.password, 10);  // Encrypt the password
         repository.registerProvider(registerInfo);

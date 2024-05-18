@@ -24,15 +24,15 @@ const getLoginLogic = (repository) =>
         await repository.logAdminLogin(basicInfo.dbId);
 
         res.cookie("R_Token", refreshToken, {
-            httpOnly: true,
-            //secure: true, 
-            sameSite: "Strict", // The refresh token only needs to be accesed by the RegisterAPI
+            httpOnly: false,
+            secure: true, 
+            sameSite: "None", // The refresh token only needs to be accesed by the RegisterAPI
             maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
         });
 
         res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : roles.admin, "email": basicInfo.email }), {
-            httpOnly: true, 
-            //secure: true,
+            httpOnly: false, 
+            secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
         });
 
@@ -62,16 +62,16 @@ const getLoginLogic = (repository) =>
 
         // Get the refresh token
         res.cookie("R_Token", refreshToken, { 
-            httpOnly: true,
-            //secure: true, 
+            httpOnly: false,
+            secure: true, 
             sameSite: "Strict", // The refresh token only needs to be accesed by the RegisterAPI
             maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
         });
 
         // Get the access token
         res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : roles.employer, "email": basicInfo.email }), {
-            httpOnly: true, 
-            //secure: true,
+            httpOnly: false, 
+            secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
         });
         
@@ -85,7 +85,6 @@ const getLoginLogic = (repository) =>
     const validateProviderLogin = async (loginInfo, res) => {
         basicInfo = await repository.getBasicProviderInfoByEmail(loginInfo.email);
         console.log(loginInfo)
-        console.log(basicInfo)
 
         if (!basicInfo || !bcrypt.compare(loginInfo.password, basicInfo.password))
             throw new UserNotValidException(); 
@@ -103,16 +102,16 @@ const getLoginLogic = (repository) =>
         await repository.logProviderLogin(basicInfo.dbId); // First the logLogin, since it is a async function
 
         res.cookie("R_Token", refreshToken, { 
-            httpOnly: true,
-            //secure: true,  //TODO: create secure connection to enable this
+            httpOnly: false,
+            secure: true,  //TODO: create secure connection to enable this
             sameSite: "Strict", // The refresh token only needs to be accesed by the RegisterAPI
             maxAge: 86400000  // Refresh token only lasts 24 hours (1000 * 60 * 60 * 24)
         });
 
         // Get the access token
         res.cookie("A_Token", generateAccessToken({ "dbId" : basicInfo.dbId, "role" : roles.provider, "email": basicInfo.email }), {
-            httpOnly: true, 
-            //secure: true,
+            httpOnly: false, 
+            secure: true,
             sameSite: "None"  // TODO: Change this to only certain origins (Probably using CORS, idk)
         });
 
